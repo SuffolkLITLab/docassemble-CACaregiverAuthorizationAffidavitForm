@@ -1,2 +1,3 @@
-# docassemble-CACaregiverAuthorizationAffidavitForm
-A docassemble project for CaregiverAuthorizationAffidavitForm.
+# docassemble.CACaregiverAuthorizationAffidavitForm
+
+A docassemble extension.

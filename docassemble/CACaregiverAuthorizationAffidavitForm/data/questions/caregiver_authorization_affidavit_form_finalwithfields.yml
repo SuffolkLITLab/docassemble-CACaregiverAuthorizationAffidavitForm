@@ -1,0 +1,446 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ALAnyState:any_state.yml
+---
+metadata:
+  title: >-
+    California Caregiver Authorization Affidavit Form
+  short title: >-
+    Caregiver Authorization A
+  description: |-
+    This affidavit allows caregivers to enroll a minor in school and authorize medical and/or dental care. It's specifically for adults who are not the minor's parents or legal guardians.
+  can_I_use_this_form: |
+    You can use this form if you are caring for a minor and need to enroll them in school or consent to their medical and/or dental care. It's valid in California and does NOT require a parent’s signature, notary, or court filing.
+  before_you_start: |
+    ### Before you get started
+    - Ensure you are at least 18 years old and the minor lives with you.
+    - Gather necessary information like the minor's name and your identification.
+
+    ### When you are finished
+    - Sign and date the affidavit.
+    - Make copies for the school and healthcare providers.
+  when_you_are_finished: |
+    After completing the affidavit, provide copies to the child's school and any healthcare providers. Keep a copy for your records.
+  efiling_enabled: False
+  integrated_efiling: False
+  integrated_email_filing: False
+  requires_notarization: False
+  unlisted: False
+  landing_page_url: >-
+    https://allianceforchildrensrights.org/resources/caregivers-affidavit/
+  maturity: production
+  estimated_completion_minutes: ""
+  estimated_completion_delta: ""
+  LIST_topics:
+    - "CO-00-00-00-00"
+  tags:
+    - "CO-00-00-00-00"
+  authors:
+    - Court Forms Online
+  original_form: []
+  original_form_published_on: ""
+  allowed_courts: []
+  typical_role: "unknown"
+  al_weaver_version: "2.3.1"
+  generated_on: "2026-09-16"
+  languages:
+    - en
+  jurisdiction: "NAM-US-US+CA"
+  review_date: 2026-09-16
+  form_titles:
+    - California Caregiver Authorization Affidavit Form
+  form_numbers: []
+  update_notes: ""
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "CA"
+---
+code: |
+  github_repo_name = 'docassemble-CaregiverAuthorizationAffidavitFormFinalwithfields'
+---
+template: interview_short_title
+content: |
+  Complete the Caregiver Authorization Affidavit
+---
+code: |
+  al_form_type = "existing_case"
+---
+id: alweaver assemblyline settings
+initial: True
+code: |
+  # Managed by the graphical AssemblyLine settings editor.
+  allowed_courts = []
+  AL_ORGANIZATION_TITLE = ''
+  AL_ORGANIZATION_HOMEPAGE = ''
+  AL_DEFAULT_LANGUAGE = 'en'
+  AL_DEFAULT_OVERFLOW_MESSAGE = '...'
+  user_ask_role = 'plaintiff'
+  al_person_answering = 'user'
+  al_form_requires_digital_signature = False
+  al_typed_signature_prefix = '/s/'
+  al_typed_signature_font = ''
+  speak_text = True
+  enable_al_language = True
+  al_user_default_language = 'en'
+  al_interview_languages = ['en']
+  github_user = ''
+  al_next_steps_enabled = True
+  al_next_steps_document_title = 'affidavit'
+  al_next_steps_document_purpose = 'authorization'
+  al_next_steps_help_organization = "Alliance for Children's Rights"
+  al_next_steps_help_url = 'https://allianceforchildrensrights.org/resources/caregivers-affidavit/'
+  al_next_steps_generate_qr_code = False
+  al_next_steps_what_happens_next = "After completing the affidavit, provide copies to the child's school and any healthcare providers. Keep a copy for your records."
+  al_next_steps_what_can_decision_maker_do = 'The decision-maker, such as a school official or healthcare provider, can rely on the affidavit to provide services without further inquiry. They do not need a court seal or notarization.'
+  al_next_steps_what_happens_if_i_win = 'If your authorization is accepted, the minor will be enrolled in school and can receive necessary medical care. This does not grant you legal custody, but it affirms your role as a caregiver.'
+  # AL_DEFAULT_COUNTRY is set in one of your own code blocks, not here.
+  # AL_DEFAULT_STATE is set in one of your own code blocks, not here.
+  # al_form_type is set in one of your own code blocks, not here.
+  # github_repo_name is set in one of your own code blocks, not here.
+---
+objects:
+  - children: ALPeopleList.using(ask_number=True,target_number=1)
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+---
+sections:
+  - people: Participants
+  - about_you: Caregiver Details
+  - case_details: Case & Children
+  - review_caregiver_authorization_affidavit_form_finalwithfields: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_caregiver_authorization_affidavit_form_finalwithfields
+code: |
+  user_ask_role
+  nav.set_section('people')
+  users.gather()
+  set_parts(subtitle=str(users))
+  users1_address_full
+  users[0].birthdate
+  users_is_relative_yes
+  nav.set_section('case_details')
+  set_progress(45)
+  children.gather()
+  children[0].birthdate
+  interview_order_caregiver_authorization_affidavit_form_finalwithfields = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  caregiver_authorization_affidavit_form_finalwithfields_intro
+  interview_order_caregiver_authorization_affidavit_form_finalwithfields
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  caregiver_authorization_affidavit_form_finalwithfields_preview_question
+  basic_questions_signature_flow
+  set_progress(100)
+  caregiver_authorization_affidavit_form_finalwithfields_download
+---
+id: Caregiver Authorization Affidavit Form final with fields intro
+continue button field: caregiver_authorization_affidavit_form_finalwithfields_intro
+question: |
+  Caregiver Authorization Affidavit Form final-with-fields
+subquestion: |
+  ### Before you get started
+  - Ensure you are at least 18 years old and the minor lives with you.
+  - Gather necessary information like the minor's name and your identification.
+
+  ### When you are finished
+  - Sign and date the affidavit.
+  - Make copies for the school and healthcare providers.
+
+  You can use this form if you are caring for a minor and need to enroll them in school or consent to their medical care. It's valid in California and does not require a parent’s signature.
+---
+id: Caregiver Information
+question: |
+  Caregiver Information
+fields:
+  - "Full address of the caregiver": users1_address_full
+  - "Caregiver's ID or license number": users1_id_number
+  - "Date caregiver signed affidavit": users1_signature_date
+    datatype: date
+---
+id: Minor Information
+question: |
+  Minor Information
+subquestion: |
+  Details about the minor in care.
+fields:
+  - "Caregiver is a relative of minor": users_is_relative_yes
+    datatype: yesno
+  - "Caregiver advised legal guardians": users_advised_parents_yes
+    datatype: yesno
+  - "Caregiver unable to contact guardians": users_unable_to_contact_parents_yes
+    datatype: yesno
+---
+comment: |
+  The questions below are copies of the questions in AssemblyLine's
+  ql_baseline.yml, rewritten to name this interview's own objects instead of the
+  generic `x`. Edit them freely: they replace the AssemblyLine versions. Delete
+  one to go back to the AssemblyLine wording.
+---
+id: children names
+sets:
+  - children[i].name.first
+  - children[i].name.last
+  - children[i].name.middle
+  - children[i].name.suffix
+question: |
+  % if hasattr(children, 'ask_number') and children.ask_number and children.target_number == 1:
+  Name of child
+  % else:
+  Name of the ${ ordinal(i) } child
+  % endif
+fields:
+  - code: |
+      children[i].name_fields()
+---
+id: users names
+sets:
+  - users[i].name.first
+  - users[i].name.last
+  - users[i].name.middle
+  - users[i].name.suffix
+question: |
+  % if i == 0 and al_person_answering == "user":
+  What is your name?
+  % elif al_form_type in ['starts_case', 'existing_case', 'appeal']:
+  Who is the ${ ordinal(i) } person on your side of the case?
+  % else:
+  What is the name of the ${ ordinal(i) } person who is adding their
+  name to this form with you?
+  % endif
+fields:
+  - code: |
+      users[i].name_fields()
+---
+id: preview caregiver_authorization_affidavit_form_finalwithfields
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.
+
+  ${ al_court_bundle.as_pdf(key='preview') }
+
+  Open the form preview in a new tab. Use the "Edit answers" button to edit your
+  answers.
+
+  ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
+
+  Return to this interview tab to continue and sign your form.
+continue button field: caregiver_authorization_affidavit_form_finalwithfields_preview_question
+---
+code: |
+  signature_fields = ['users[0].signature']
+---
+code: |
+  # This is a placeholder for the addresses that will be searched
+  # for matching address to court. Edit if court venue is based on
+  # a different address than the user's
+  [user.address.address for user in users.complete_elements()]
+  addresses_to_search = [user.address for user in users.complete_elements()]
+---
+id: caregiver authorization affidavit form finalwithfields review screen
+event: review_caregiver_authorization_affidavit_form_finalwithfields
+question: |
+  Review your answers
+review:
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: users1_address_full
+    button: |
+      **Caregiver Information**
+
+      Full address of the caregiver: ${ showifdef('users1_address_full') }
+
+      Caregiver's ID or license number: ${ showifdef('users1_id_number') }
+
+      Date caregiver signed affidavit: ${ showifdef('users1_signature_date') }
+  - Edit: users_is_relative_yes
+    button: |
+      **Minor Information**
+
+      Caregiver is a relative of minor: ${ word(yesno(users_is_relative_yes)) if defined('users_is_relative_yes') else '' }
+
+      Caregiver advised legal guardians: ${ word(yesno(users_advised_parents_yes)) if defined('users_advised_parents_yes') else '' }
+
+      Caregiver unable to contact guardians: ${ word(yesno(users_unable_to_contact_parents_yes)) if defined('users_unable_to_contact_parents_yes') else '' }
+  - Edit: children.revisit
+    button: |
+      **Children**
+
+      % for item in children:
+        * ${ item }
+      % endfor
+  - Edit: users1_address_full
+    button: |
+      **Full address of the caregiver**
+
+      Full address of the caregiver: ${ showifdef('users1_address_full') }
+  - Edit: users1_id_number
+    button: |
+      **Caregiver's ID or license number**
+
+      Caregiver's ID or license number: ${ showifdef('users1_id_number') }
+  - Edit: users1_signature_date
+    button: |
+      **Date caregiver signed affidavit**
+
+      Date caregiver signed affidavit: ${ showifdef('users1_signature_date') }
+  - Edit: users_is_relative_yes
+    button: |
+      **Caregiver is a relative of minor**
+
+      Caregiver is a relative of minor: ${ word(yesno(users_is_relative_yes)) if defined('users_is_relative_yes') else '' }
+  - Edit: users_advised_parents_yes
+    button: |
+      **Caregiver advised legal guardians**
+
+      Caregiver advised legal guardians: ${ word(yesno(users_advised_parents_yes)) if defined('users_advised_parents_yes') else '' }
+  - Edit: users_unable_to_contact_parents_yes
+    button: |
+      **Caregiver unable to contact guardians**
+
+      Caregiver unable to contact guardians: ${ word(yesno(users_unable_to_contact_parents_yes)) if defined('users_unable_to_contact_parents_yes') else '' }
+---
+id: edit users
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Name: |
+      row_item.name_full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+edit:
+  - name.first
+  - birthdate
+confirm: True
+---
+id: edit children
+continue button field: children.revisit
+question: |
+  Edit children
+subquestion: |
+  ${ children.table }
+
+  ${ children.add_action() }
+---
+table: children.table
+rows: children
+columns:
+  - Name: |
+      row_item.name_full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+edit:
+  - name.first
+  - birthdate
+confirm: True
+---
+id: download caregiver_authorization_affidavit_form_finalwithfields
+event: caregiver_authorization_affidavit_form_finalwithfields_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+
+  Use the options on this page to view, download and send your form. Use the
+  "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
+
+  ${ al_user_bundle.download_list_html() }
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions: ALDocument.using(filename="caregiver_authorization_affidavit_form_finalwithfields_next_steps.docx", enabled=al_next_steps_enabled, has_addendum=False)
+  - caregiver_authorization_affidavit_form_finalwithfields_attachment: ALDocument.using(filename="caregiver_authorization_affidavit_form_finalwithfields", enabled=True, has_addendum=False)
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions, caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_authorization_affidavit_form_finalwithfields", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_authorization_affidavit_form_finalwithfields", enabled=True)
+---
+template: caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions.title
+content: |
+  Instructions
+---
+template: caregiver_authorization_affidavit_form_finalwithfields_attachment.title
+content: |
+  Caregiver Authorization Affidavit Form final-with-fields
+---
+template: al_user_bundle.title
+content: |
+  All forms to download for your records
+---
+template: al_court_bundle.title
+content: |
+  All forms to deliver to court
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the
+# same template is used for "preview" and "final" keys, and logic in the template checks
+# the value of `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: caregiver_authorization_affidavit_form_finalwithfields_next_steps
+  docx template file: caregiver_authorization_affidavit_form_finalwithfields_next_steps.docx
+  variable name: caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: caregiver authorization affidavit form finalwithfields
+  filename: caregiver_authorization_affidavit_form_finalwithfields
+  variable name: caregiver_authorization_affidavit_form_finalwithfields_attachment[i]
+  skip undefined: True
+  pdf template file: Caregiver_Authorization_Affidavit_Form_final-with-fields.pdf
+  fields:
+      - "children1_name_full": ${ children[0] }
+      - "children1_birthdate": ${ children[0].birthdate.format() }
+      - "users1_name_full": ${ users[0] }
+      - "users1_address_full": ${ users1_address_full }
+      - "users_is_relative_yes": ${ users_is_relative_yes }
+      - "users_advised_parents_yes": ${ users_advised_parents_yes }
+      - "users_unable_to_contact_parents_yes": ${ users_unable_to_contact_parents_yes }
+      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_id_number": ${ users1_id_number }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
+      - "users1_signature_date": ${ users1_signature_date.format() }
