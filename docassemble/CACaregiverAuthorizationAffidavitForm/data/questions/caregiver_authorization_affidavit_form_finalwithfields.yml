@@ -166,19 +166,20 @@ subquestion: |2
   ### Before you start:
   - Make sure you are at least 18 years old and the child lives with you.
   - Get important information, like the child's name and your ID.
+  - Try to contact the parent(s), if possible.
   
   ### When you finish:
   - Sign the form.
   - Make copies for the school and doctors.
   
-  Use this form to enroll a child in school or get them medical care. It is only for use in California and does not need a parent’s signature.
+  Use this form to enroll a child in school or get them medical care. It is only for use in California. The form does not need a parent’s signature.
 ---
 id: "18 or Older"
 question: "Are you 18 or older?"
 fields:
   - Are you 18 or older?: user_age
     datatype: yesnoradio
-subquestion: "You must be 18 or older to complete this form."
+subquestion: "You must be 18 or older to fill in this form."
 ---
 id: users names
 sets:
@@ -204,18 +205,18 @@ question: |
   Caregiver Information
 fields:
   - "What's your full address?": users1_address_full
-  - "What's your ID number? (Use only one: Driver's License, Consular Card, Medi-Cal, or Social Security)": users1_id_number
+  - "What's your ID number? (Driver's License, Consular Card, Medi-Cal, or Social Security)": users1_id_number
   - Signature Date?: users1_signature_date
     datatype: date
 subquestion: "The caregiver is the person filling out this form and will be watching the child."
 ---
 id: Minor Information
-question: "Advised Parents?"
-subquestion: "Were you able to speak with at least one parent? Were you unable to contact one or both parents?"
+question: "Told Parents?"
+subquestion: "Did you speak with the parent(s)?"
 fields:
-  - You advised at least one parent.: users_advised_parents_yes
+  - Spoke with at least one parent.: users_advised_parents_yes
     datatype: yesno
-  - You were unable to contact one or both parents.: users_unable_to_contact_parents_yes
+  - Unable to reach one or both parents.: users_unable_to_contact_parents_yes
     datatype: yesno
 ---
 comment: |
@@ -386,8 +387,8 @@ confirm: True
 ---
 id: download caregiver_authorization_affidavit_form_finalwithfields
 event: caregiver_authorization_affidavit_form_finalwithfields_download
-question: |
-  All done
+question: |2
+  All done!
 subquestion: |2
   Thank you ${users}. Your form is ready to download and send.
   
