@@ -1,13 +1,14 @@
----
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
+  - docassemble.MassAccess:massaccess.yml
+---
 ---
 metadata:
   title: >-
     California Caregiver Authorization Affidavit Form
   short title: >-
-    Caregiver Authorization A
+    Caregiver Authorization
   description: |-
     This affidavit allows caregivers to enroll a minor in school and authorize medical and/or dental care. It's specifically for adults who are not the minor's parents or legal guardians.
   can_I_use_this_form: |
@@ -66,7 +67,7 @@ code: |
 ---
 template: interview_short_title
 content: |
-  Complete the Caregiver Authorization Affidavit
+  Fill out the Caregiver Authorization Form
 ---
 code: |
   al_form_type = "existing_case"
@@ -109,9 +110,8 @@ objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
 ---
 sections:
-  - people: Participants
-  - about_you: Caregiver Details
-  - case_details: Case & Children
+  - people: Caregiver Details
+  - case_details: Child's Info
   - review_caregiver_authorization_affidavit_form_finalwithfields: Review your answers
 ---
 #################### Interview order #####################
@@ -119,6 +119,9 @@ comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_caregiver_authorization_affidavit_form_finalwithfields
 code: |
+  user_age
+  if user_age < 18:
+    pass
   user_ask_role
   nav.set_section('people')
   users.gather()
@@ -126,6 +129,7 @@ code: |
   users1_address_full
   users[0].birthdate
   users_is_relative_yes
+  users_advised_parents_yes
   nav.set_section('case_details')
   set_progress(45)
   children.gather()
@@ -157,62 +161,24 @@ code: |
 ---
 id: Caregiver Authorization Affidavit Form final with fields intro
 continue button field: caregiver_authorization_affidavit_form_finalwithfields_intro
-question: |
-  Caregiver Authorization Affidavit Form final-with-fields
-subquestion: |
-  ### Before you get started
-  - Ensure you are at least 18 years old and the minor lives with you.
-  - Gather necessary information like the minor's name and your identification.
-
-  ### When you are finished
-  - Sign and date the affidavit.
-  - Make copies for the school and healthcare providers.
-
-  You can use this form if you are caring for a minor and need to enroll them in school or consent to their medical care. It's valid in California and does not require a parent’s signature.
+question: "Caregiver Authorization Affidavit Form"
+subquestion: |2
+  ### Before you start:
+  - Make sure you are at least 18 years old and the child lives with you.
+  - Get important information, like the child's name and your ID.
+  
+  ### When you finish:
+  - Sign the form.
+  - Make copies for the school and doctors.
+  
+  Use this form to enroll a child in school or get them medical care. It is only for use in California and does not need a parent’s signature.
 ---
-id: Caregiver Information
-question: |
-  Caregiver Information
+id: "18 or Older"
+question: "Are you 18 or older?"
 fields:
-  - "Full address of the caregiver": users1_address_full
-  - "Caregiver's ID or license number": users1_id_number
-  - "Date caregiver signed affidavit": users1_signature_date
-    datatype: date
----
-id: Minor Information
-question: |
-  Minor Information
-subquestion: |
-  Details about the minor in care.
-fields:
-  - "Caregiver is a relative of minor": users_is_relative_yes
-    datatype: yesno
-  - "Caregiver advised legal guardians": users_advised_parents_yes
-    datatype: yesno
-  - "Caregiver unable to contact guardians": users_unable_to_contact_parents_yes
-    datatype: yesno
----
-comment: |
-  The questions below are copies of the questions in AssemblyLine's
-  ql_baseline.yml, rewritten to name this interview's own objects instead of the
-  generic `x`. Edit them freely: they replace the AssemblyLine versions. Delete
-  one to go back to the AssemblyLine wording.
----
-id: children names
-sets:
-  - children[i].name.first
-  - children[i].name.last
-  - children[i].name.middle
-  - children[i].name.suffix
-question: |
-  % if hasattr(children, 'ask_number') and children.ask_number and children.target_number == 1:
-  Name of child
-  % else:
-  Name of the ${ ordinal(i) } child
-  % endif
-fields:
-  - code: |
-      children[i].name_fields()
+  - Are you 18 or older?: user_age
+    datatype: yesnoradio
+subquestion: "You must be 18 or older to complete this form."
 ---
 id: users names
 sets:
@@ -232,6 +198,53 @@ question: |
 fields:
   - code: |
       users[i].name_fields()
+---
+id: Caregiver Information
+question: |
+  Caregiver Information
+fields:
+  - "What's your full address?": users1_address_full
+  - "What's your ID number? (Use only one: Driver's License, Consular Card, Medi-Cal, or Social Security)": users1_id_number
+  - Signature Date?: users1_signature_date
+    datatype: date
+subquestion: "The caregiver is the person filling out this form and will be watching the child."
+---
+id: Minor Information
+question: "Advised Parents?"
+subquestion: "Were you able to speak with at least one parent? Were you unable to contact one or both parents?"
+fields:
+  - You advised at least one parent.: users_advised_parents_yes
+    datatype: yesno
+  - You were unable to contact one or both parents.: users_unable_to_contact_parents_yes
+    datatype: yesno
+---
+comment: |
+  The questions below are copies of the questions in AssemblyLine's
+  ql_baseline.yml, rewritten to name this interview's own objects instead of the
+  generic `x`. Edit them freely: they replace the AssemblyLine versions. Delete
+  one to go back to the AssemblyLine wording.
+---
+id: Minor Info1
+question: "Child's Information"
+fields:
+  - Are you related to the child?: users_is_relative_yes
+    datatype: yesnoradio
+---
+id: children names
+sets:
+  - children[i].name.first
+  - children[i].name.last
+  - children[i].name.middle
+  - children[i].name.suffix
+question: |
+  % if hasattr(children, 'ask_number') and children.ask_number and children.target_number == 1:
+  Name of child
+  % else:
+  Name of the ${ ordinal(i) } child
+  % endif
+fields:
+  - code: |
+      children[i].name_fields()
 ---
 id: preview caregiver_authorization_affidavit_form_finalwithfields
 question: |
@@ -375,18 +388,17 @@ id: download caregiver_authorization_affidavit_form_finalwithfields
 event: caregiver_authorization_affidavit_form_finalwithfields_download
 question: |
   All done
-subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
-
+subquestion: |2
+  Thank you ${users}. Your form is ready to download and send.
+  
   Use the options on this page to view, download and send your form. Use the
   "Edit answers" button to fix any mistakes.
-
+  
   ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
-
+  
   ${ al_user_bundle.download_list_html() }
-
+  
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
-
 progress: 100
 ---
 # ALDocument objects specify the metadata for each template
