@@ -16,6 +16,7 @@ metadata:
     ### Before you get started
     - Ensure you are at least 18 years old and the minor lives with you.
     - Gather necessary information like the minor's name and your identification.
+    - The child must be under 18 years of age on the date this form is completed.
 
     ### When you are finished
     - Sign and date the affidavit (signature date is automatically filled as today).
@@ -52,7 +53,7 @@ metadata:
   form_titles:
     - California Caregiver Authorization Affidavit Form
   form_numbers: []
-  update_notes: "Updated: (1) ID question on standalone screen with legal purpose explanation; (2) Signature date automatically filled to today's date; (3) Caregiver address uses AssemblyLine Question Library address with Google Maps autocomplete; (4) Actionable practical next steps aligned with real caregiver instructions."
+  update_notes: "Updated: (1) ID screen with dropdown (CDL, CA State ID, Consular Card, Medi-Cal, SSN) and tailored character-length textboxes; (2) Role screen (Parent/Legal Guardian vs. Authorized Caregiver); (3) Automatic parent notification for Parent/Legal Guardian; (4) Yes/No radio parent notice for Authorized Caregiver; (5) Child 18+ off-ramp; (6) Caregiver <18 off-ramp; (7) Auto signature date; (8) Google Maps address; (9) Next steps document unlinked from template before signing; preview shows only statutory affidavit."
 ---
 code: |
   # This controls the default country and list of states in address field questions
@@ -122,16 +123,33 @@ sections:
   - case_details: Child's info
   - review_caregiver_authorization_affidavit_form_finalwithfields: Review your answers
 ---
+# Code block determining parental notification based on role
+code: |
+  if user_role_type == 'parent_guardian':
+    # If Parent/Legal Guardian, automatically mark parents advised as True (Yes)
+    users_advised_parents_yes = True
+    users_unable_to_contact_parents_yes = False
+  elif user_role_type == 'authorized_caregiver':
+    # If Authorized Caregiver, ask via yes/no radio question
+    users_advised_parents_yes = authorized_caregiver_contacted_parents_radio
+    users_unable_to_contact_parents_yes = not authorized_caregiver_contacted_parents_radio
+  else:
+    # Default fallback
+    users_advised_parents_yes = True
+    users_unable_to_contact_parents_yes = False
+---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_caregiver_authorization_affidavit_form_finalwithfields
 code: |
-  # Ask age qualification gate
+  # 1. Ask caregiver age qualification gate
   user_age
-  # If user answered 'No' (user_age is False), trigger the off-ramp screen
+  # If caregiver answered 'No' (user_age is False), trigger the caregiver off-ramp screen
   if not user_age:
     under_18_offramp
+  # 2. Ask whether they are the Parent/Legal Guardian or Authorized Caregiver
+  user_role_type
   user_ask_role
   nav.set_section('people')
   users.gather()
@@ -141,14 +159,20 @@ code: |
   # Formats Question Library address into single-line string for PDF template
   users1_address_full = users[0].address.on_one_line()
   users[0].birthdate
-  # Dedicated standalone ID question screen
+  # Dedicated standalone ID question screen with dynamic dropdown and tailored length textbox
+  caregiver_id_type
   users1_id_number
   users_is_relative_yes
+  # Triggers the parental notification logic (automatic for Parent/Legal Guardian, yes/no radio for authorized caregiver)
   users_advised_parents_yes
   nav.set_section('case_details')
   set_progress(45)
   children.gather()
+  # Gather child's birthdate
   children[0].birthdate
+  # 3. Child age check: If child is 18 or older from the date the form is being filled, trigger off-ramp
+  if children[0].age_in_years() >= 18:
+    child_too_old_offramp
   interview_order_caregiver_authorization_affidavit_form_finalwithfields = True
 ---
 ###################### Main order ######################
@@ -180,12 +204,13 @@ continue button field: caregiver_authorization_affidavit_form_finalwithfields_in
 question: "Caregiver Authorization Affidavit"
 subquestion: |2
   ### Before you start:
-  - Make sure you are at least 18 years old and the child lives with you.
-  - Get important information, like the child's name and your identification.
-  - Try to contact the parent(s), if possible, to let them know you are filling out this form.
+  - You must be at least 18 years old.
+  - The child must live with you and must be under 18 years old.
+  - Get important information: the child's name and the caregiver's identification.
+  - Identification can be: California Driver's License, Social Security Number, Med-Cal ID, or Consular Card.
   
   ### When you finish:
-  - Sign the form (the date is automatically set to today).
+  - Sign the form.
   - Keep the original safe at home.
   - Make copies for the school and doctors.
   
@@ -196,25 +221,51 @@ question: "Are you 18 or older?"
 fields:
   - Are you 18 or older?: user_age
     datatype: yesnoradio
-subquestion: "You must be 18 or older to fill in this form."
 ---
 id: under 18 offramp
 event: under_18_offramp
-question: |
-  You cannot use this form
+question: "You cannot use this form."
 subquestion: |2
-  Under **California Family Code § 6550**, only an adult caregiver who is **at least 18 years of age** can complete a Caregiver's Authorization Affidavit.
+  You must be **at least 18 years of age** to complete this form.
   
   Because you answered that you are not 18 or older, you cannot use this form to enroll a child in school or get medical treatment.
   
   ### What can you do instead?
   * **Have an adult complete this form:** Another adult (18 or older) living in the home—such as a relative, guardian, or other responsible adult—can fill out this form on behalf of the child.
-  * **Contact Legal Assistance:** For guidance regarding guardianship, caregiver rights, or legal options, visit [Alliance for Children's Rights](https://allianceforchildrensrights.org/resources/caregivers-affidavit/).
-  * **Contact the School District Liaison:** Under California Education Code § 48204, public school districts have designated liaisons who can help you with enrolling the child.
+  * **Contact the School District Liaison:** Public school districts have designated liaisons who can help you with enrolling the child.
 buttons:
-  - Exit to Alliance for Children's Rights: exit
-    url: https://allianceforchildrensrights.org/resources/caregivers-affidavit/
-  - Start over: restart
+  [{"Start over":"restart"}]
+---
+# Screen asking if user is the Parent/Legal Guardian or Authorized Caregiver
+id: parent or caregiver role
+question: "Are you the parent/legal guardian or the caregiver being authorized?"
+fields:
+  - "Select your role:": user_role_type
+    datatype: radio
+    choices:
+      - {"Parent/Legal Guardian":"parent_guardian"}
+      - {"Caregiver being authorized":"authorized_caregiver"}
+---
+# Screen asking authorized caregiver if they contacted the parents using yes/no radio
+id: authorized caregiver contacted parents
+question: "Did you contact the parent(s)?"
+subquestion: |2
+  As an authorized caregiver, have you notified the minor's parent(s) or legal guardian(s) of your intent to authorize medical and dental care?
+fields:
+  - "Have you contacted the parents?": authorized_caregiver_contacted_parents_radio
+    datatype: yesnoradio
+---
+# Off-ramp screen triggered when child is 18 years or older on the date the form is being filled
+id: child too old offramp
+event: child_too_old_offramp
+question: |2
+  This individual is not a minor (18 or older)
+subquestion: |2-
+  Based on the date of birth you entered (${ children[0].birthdate.format() }), **${ children[0] }** is **${ int(children[0].age_in_years()) } years old** today.
+  
+  This form can **only** be used for a **minor** (under 18 years of age). 
+buttons:
+  [{"Start over":"restart"}]
 ---
 id: users names
 sets:
@@ -237,10 +288,9 @@ fields:
 ---
 # Question Library Address Question (connected with Google Maps API autocomplete)
 id: caregiver address
-question: |
-  What is your home address?
-subquestion: |2
-  Enter the California address where you and the child currently live. As you start typing, Google Maps will suggest verified matching addresses.
+question: |2
+  What is the your home address?
+subquestion: "Enter the address where the child lives."
 fields:
   - code: |
       users[0].address_fields()
@@ -252,36 +302,66 @@ sets:
   - "users[0].address.state"
   - "users[0].address.country"
 ---
-# Separate Dedicated Screen for Caregiver ID Number with full legal purpose description
+# Separate Dedicated Screen for Caregiver ID Number with dynamic dropdown and tailored character-length textbox
 id: Caregiver ID Number
 question: "Caregiver identification"
 subquestion: |2
   ### Why is this identification needed?
-  Under **California Family Code § 6552 (Item 8)**, you must give an ID number to have a valid Caregiver's Authorization Affidavit.
+  You must give an ID number to have a valid Caregiver's Authorization Affidavit.
   
   **What this ID is used for:**
   - **Identity Verification:** Schools, doctors, dentists, and clinics use this number to verify that you are the specific adult signing this form.
   - **Fraud Prevention:** It confirms who you are without requiring a notary public or court clerk verification.
-  
-  You may use any **one** of the following:
-  - California Driver's License (CDL)
-  - California State ID Card
-  - Consular Identification Card (Matrícula Consular)
-  - Medi-Cal Identification Card
-  - Social Security Number (SSN)
 fields:
-  - label: "Identification Type & Number"
-    field: users1_id_number
-    hint: "e.g., CA Driver's License #D1234567 or Medi-Cal #..."
+  - "Select your identification document:": caregiver_id_type
+    datatype: dropdown
+    choices:
+      - "California Driver’s License (CDL)": cdl
+      - "California State ID Card": ca_id
+      - "Consular Identification Card (Matrícula Consular)": consular
+      - "Medi-Cal Identification Card": medical
+      - "Social Security Number (SSN)": ssn
+  - label: "California Driver's License Number (8 characters):"
+    field: caregiver_cdl_number
+    show if: {"is":"cdl","variable":"caregiver_id_type"}
+    hint: "1 letter followed by 7 digits (e.g., D1234567)"
+    maxlength: 8
+  - label: "California State ID Card Number (8 characters):"
+    field: caregiver_ca_id_number
+    show if: {"is":"ca_id","variable":"caregiver_id_type"}
+    hint: "1 letter followed by 7 digits (e.g., I1234567)"
+    maxlength: 8
+  - label: "Consular Identification Card Number (up to 12 characters):"
+    field: caregiver_consular_number
+    show if: {"is":"consular","variable":"caregiver_id_type"}
+    hint: "Consular card number (e.g., MC12345678)"
+    maxlength: 12
+  - label: "Medi-Cal Identification Number (9 characters):"
+    field: caregiver_medical_number
+    show if: {"is":"medical","variable":"caregiver_id_type"}
+    hint: "9 alphanumeric characters (e.g., 98765432A)"
+    maxlength: 9
+  - label: "Social Security Number (9 digits):"
+    field: caregiver_ssn_number
+    datatype: ssn
+    show if: {"is":"ssn","variable":"caregiver_id_type"}
+    hint: "9 digits (XXX-XX-XXXX)"
+    maxlength: 11
 ---
-id: Minor Information
-question: "Have you told the parents about filling out this form?"
-subquestion: "Did you tell the parents "
-fields:
-  - I spoke with one of the parents.: users_advised_parents_yes
-    datatype: yesno
-  - I was not able to reach either of them.: users_unable_to_contact_parents_yes
-    datatype: yesno
+# Code block to format users1_id_number from the selected ID dropdown and tailored value
+code: |
+  if caregiver_id_type == 'cdl':
+    users1_id_number = f"California Driver's License (CDL) #{caregiver_cdl_number.strip().upper()}"
+  elif caregiver_id_type == 'ca_id':
+    users1_id_number = f"California State ID Card #{caregiver_ca_id_number.strip().upper()}"
+  elif caregiver_id_type == 'consular':
+    users1_id_number = f"Consular Identification Card (Matrícula Consular) #{caregiver_consular_number.strip().upper()}"
+  elif caregiver_id_type == 'medical':
+    users1_id_number = f"Medi-Cal Identification Card #{caregiver_medical_number.strip().upper()}"
+  elif caregiver_id_type == 'ssn':
+    users1_id_number = f"Social Security Number (SSN): {caregiver_ssn_number.strip()}"
+  else:
+    users1_id_number = ""
 ---
 comment: |
   The questions below are copies of the questions in AssemblyLine's
@@ -292,7 +372,7 @@ comment: |
 id: Minor Info1
 question: "Child's information"
 fields:
-  - Are you related to the child?: users_is_relative_yes
+  - Is the authorized caregiver related to the child?: users_is_relative_yes
     datatype: yesnoradio
 ---
 id: children names
@@ -314,16 +394,17 @@ fields:
 id: preview caregiver_authorization_affidavit_form_finalwithfields
 question: |
   Preview your form before you sign it
-subquestion: |
-  Here is a preview of the form you will sign on the next page. The signature date is automatically recorded as today (${ users1_signature_date.format() }).
-
-  ${ al_user_bundle.as_pdf(key='preview') }
-
+subquestion: |2
+  Here is a preview of the official California Caregiver's Authorization Affidavit you will sign on the next page. The signature date is automatically recorded as today (${ users1_signature_date.format() }).
+  
+  
+  ${ caregiver_authorization_affidavit_form_finalwithfields_attachment.as_pdf(key='preview') }
+  
   Open the form preview in a new tab. Use the "Edit answers" button to edit your
   answers.
-
+  
   ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
-
+  
   Return to this interview tab to continue and sign your form.
 continue button field: caregiver_authorization_affidavit_form_finalwithfields_preview_question
 ---
@@ -349,6 +430,13 @@ review:
       % for item in users:
         * ${ item }
       % endfor
+  - Edit: user_role_type
+    button: |
+      **Role & Parental Contact**
+
+      Role: ${ 'Parent/Legal Guardian' if user_role_type == 'parent_guardian' else 'Authorized Caregiver' }
+
+      Parents advised: ${ word(yesno(users_advised_parents_yes)) if defined('users_advised_parents_yes') else '' }
   - Edit: users[0].address.address
     button: |
       **Caregiver Home Address (Google Maps Verified)**
@@ -364,10 +452,6 @@ review:
       **Minor Information**
 
       Caregiver is a relative of minor: ${ word(yesno(users_is_relative_yes)) if defined('users_is_relative_yes') else '' }
-
-      Caregiver advised legal guardians: ${ word(yesno(users_advised_parents_yes)) if defined('users_advised_parents_yes') else '' }
-
-      Caregiver unable to contact guardians: ${ word(yesno(users_unable_to_contact_parents_yes)) if defined('users_unable_to_contact_parents_yes') else '' }
   - Edit: children.revisit
     button: |
       **Children**
@@ -427,17 +511,17 @@ question: |2
 subquestion: |2
   Thank you, ${users[0]}. Your official California Caregiver Authorization Affidavit has been generated.
   
-  ### What you need to do next:
-  1. **Print & Keep the Original:** Keep the signed original document in a safe place at home. This affidavit is valid for **one year** from today (${ users1_signature_date.format() }).
-  2. **Give a Copy to the School:** Give a copy to the child's school principal, registrar, or district office.
-  3. **Give a Copy to Healthcare Providers:** Give a copy to doctors, dentists, or clinics when needing medical care for the child.
-  4. **Do NOT File with the Court:** This affidavit does NOT require notarization, a court hearing, or court filing.
-  5. **If Living Arrangements Change:** If the child stops living with you, immediately tell the school and healthcare providers.
-  
-  Use the options below to download your affidavit and your Next Steps instruction guide.
+  ### Download Options:
   
   ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
   
+  #### 1. Official Caregiver Authorization Affidavit (Signed Legal Form Only)
+  ${ al_affidavit_bundle.download_list_html() }
+  
+  #### 2. Caregiver Next Steps & Practical Instructions (Separate Document)
+  ${ al_next_steps_bundle.download_list_html() }
+  
+  #### 3. Complete Packet (Both Documents)
   ${ al_user_bundle.download_list_html() }
   
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
@@ -445,25 +529,35 @@ progress: 100
 ---
 # ALDocument objects specify the metadata for each template
 objects:
-  - caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions: ALDocument.using(filename="caregiver_next_steps_instructions.docx", enabled=al_next_steps_enabled, has_addendum=False)
   - caregiver_authorization_affidavit_form_finalwithfields_attachment: ALDocument.using(filename="caregiver_authorization_affidavit_form_finalwithfields", enabled=True, has_addendum=False)
+  - caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions: ALDocument.using(filename="caregiver_next_steps_instructions.docx", enabled=al_next_steps_enabled, has_addendum=False)
 ---
-# Bundles group the ALDocuments into separate downloads for caregiver records, school, and doctors
+# Bundles group the ALDocuments into separate downloads: legal affidavit and next steps are kept independent
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions, caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_authorization_affidavit_packet", enabled=True)
+  - al_affidavit_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_authorization_affidavit_official_form", enabled=True)
+  - al_next_steps_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions], filename="caregiver_next_steps_instructions_guide", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment, caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions], filename="caregiver_authorization_affidavit_packet", enabled=True)
   - al_provider_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_affidavit_for_school_and_health_providers", enabled=True)
----
-template: caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions.title
-content: |
-  Caregiver Next Steps & Instructions Checklist
 ---
 template: caregiver_authorization_affidavit_form_finalwithfields_attachment.title
 content: |
-  California Caregiver Authorization Affidavit Form (Signed)
+  California Caregiver Authorization Affidavit Form (Official Legal Document)
+---
+template: caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions.title
+content: |
+  Caregiver Next Steps & Instructions Checklist (Standalone Guide)
+---
+template: al_affidavit_bundle.title
+content: |
+  Official Signed Caregiver Affidavit (Legal Form Only)
+---
+template: al_next_steps_bundle.title
+content: |
+  Next Steps & Instructions Guide (Separate Document)
 ---
 template: al_user_bundle.title
 content: |
-  Complete Caregiver Packet (Affidavit + Next Steps Instructions)
+  Complete Caregiver Packet (Affidavit + Next Steps)
 ---
 template: al_provider_bundle.title
 content: |
