@@ -9,20 +9,20 @@ metadata:
   short title: >-
     Caregiver Authorization
   description: |-
-    This affidavit allows adult caregivers to enroll a child in school and approve medical care. Qualified relative caregivers can approve full medical, dental, and mental health care. Non-relative caregivers can approve school enrollment and school-related medical checkups (like vaccines and school physicals).
+    This affidavit allows adult caregivers to enroll a child in school and approve medical care. Relative caregivers can approve full medical, dental, and mental health care. Non-relative caregivers can approve school enrollment and school-related medical checkups (like vaccines and school physicals).
   can_I_use_this_form: |
     You can use this form if you are an adult caring for a child who lives with you in California. It does NOT require a parent's signature, notary, or court filing.
   before_you_start: |
     ### Before you get started
     - You must be at least 18 years old and the child must live with you.
     - The child must be under 18 years old on the date this form is completed.
-    - Have your identification ready (California Driver's License, California State ID, Consular Card, Medi-Cal ID, or Social Security Number).
-    - If you are a relative (like a grandparent, aunt, uncle, or adult brother or sister), this form allows you to approve full medical and dental care. If you are not a relative, it covers school enrollment and school-related checkups.
+    - Have the authorized caregiver's identification ready (California Driver's License, California State ID, Consular Card, Medi-Cal ID, or Social Security Number).
+    - If you are a relative, this form allows you to approve full medical and dental care. If you are not a relative, it covers school enrollment and school-related checkups.
 
     ### When you are finished
-    - Sign and date the form (the signature date is automatically filled as today).
     - Keep the signed original safe at home.
-    - Give a copy to the school and another copy to doctors or clinics. Do NOT file this in court.
+    - Give a copy to the school and another copy to doctors or clinics. 
+    - Do NOT file this in court.
   when_you_are_finished: |
     Keep the signed original in a safe place at home. Give copies to the child's school and healthcare providers. Do NOT file this form with the court.
   efiling_enabled: False
@@ -54,7 +54,7 @@ metadata:
   form_titles:
     - California Caregiver Authorization Affidavit Form
   form_numbers: []
-  update_notes: "Updated: (1) Added plain-language medical scope distinguishing relatives (full care) from non-relatives (school-related care); (2) Added clear moving instructions distinguishing moving together from child moving out; (3) Clean parent notification questions; (4) Retained required identification options."
+  update_notes: "Updated: (1) Added plain-language medical scope distinguishing relatives (full care) from non-relatives (school-related care); (2) Added clear moving instructions distinguishing moving together from child moving out; (3) Added 3-way parent notification option (contacted, unable to contact, or spoke with one but unable to reach the other, marking both boxes); (4) Retained required identification options."
 ---
 code: |
   # This controls the default country and list of states in address field questions
@@ -137,9 +137,22 @@ code: |
     users_advised_parents_yes = True
     users_unable_to_contact_parents_yes = False
   else:
-    # If caregiver, single yes/no based on if caregiver contacted parents
-    users_advised_parents_yes = caregiver_advised_parents
-    users_unable_to_contact_parents_yes = not caregiver_advised_parents
+    # If caregiver:
+    # 1. Advised parents -> mark advised box only
+    # 2. Unable to contact parents -> mark unable box only
+    # 3. Spoke with one parent but unable to speak with the other -> mark BOTH boxes
+    if caregiver_parent_contact_status == 'advised':
+      users_advised_parents_yes = True
+      users_unable_to_contact_parents_yes = False
+    elif caregiver_parent_contact_status == 'unable':
+      users_advised_parents_yes = False
+      users_unable_to_contact_parents_yes = True
+    elif caregiver_parent_contact_status == 'spoke_one_unable_other':
+      users_advised_parents_yes = True
+      users_unable_to_contact_parents_yes = True
+    else:
+      users_advised_parents_yes = False
+      users_unable_to_contact_parents_yes = False
 ---
 #################### Interview order #####################
 comment: |
@@ -171,9 +184,9 @@ code: |
     users_is_relative_yes
   # 8. Parental notification question (Item 6):
   # If parent, skip the question and automatically mark it yes.
-  # If caregiver, ask if they contacted the parents (single yes/no question).
+  # If caregiver, ask how they contacted the parents.
   if user_role_type == 'authorized_caregiver':
-    caregiver_advised_parents
+    caregiver_parent_contact_status
   users_advised_parents_yes
   nav.set_section('case_details')
   set_progress(45)
@@ -277,10 +290,15 @@ fields:
 # Screen asking if caregiver notified parents
 id: caregiver advised parents question
 question: "Did you notify the parents?"
-subquestion: "Have you told the parent or legal guardian that you are completing this form to get care for the child?"
+subquestion: |2
+  California law requires you to advise the parent(s) or declare that you were unable to contact them.
 fields:
-  - Did you notify the parents?: caregiver_advised_parents
-    datatype: yesnoradio
+  - "Were you able to contact the child's parents?": caregiver_parent_contact_status
+    datatype: radio
+    choices:
+      - "Yes, I notified the parent(s)": advised
+      - "No, I was unable to contact the parent(s)": unable
+      - "I was able to speak with one parent, but unable to speak with the other": spoke_one_unable_other
 ---
 # Dedicated Screen for Caregiver ID Number (Required)
 id: Caregiver ID Number
@@ -343,29 +361,20 @@ code: |
   else:
     users1_id_number = ""
 ---
+template: childHeadline
+content: |
+  You cannot use this form for a child who is 18 or older.
+---
 # Off-ramp screen triggered when child is 18 years or older on the date the form is being filled
 id: child too old offramp
 event: child_too_old_offramp
-question: |2
-  ${childHeadline}
-subquestion: |2
+question: "You cannot use this form for a child who is 18 or older."
+subquestion: |2-
   Based on the date of birth you entered (${ children[0].birthdate.format() }), **${ children[0] }** is **${ int(children[0].age_in_years()) } years old** today.
   
   A Caregiver's Authorization Affidavit can **only** be used for a minor child under 18 years of age. Once a person turns 18, they are an adult and can make their own educational and medical decisions.
-  
-  ### Why you cannot use this form:
-  * **Adult Status:** An individual 18 or older has full legal authority to enroll themselves in school, consent to their own medical and dental care, and sign documents.
-  * **Form Not Valid for Adults:** Schools and medical clinics cannot accept a caregiver affidavit for an adult.
-  
-  ### What you can do instead:
-  * **Self-Enrollment & Consent:** The young adult can enroll themselves in school or approve their own medical care.
-  * **Healthcare Power of Attorney:** If they want your help making medical decisions, they can complete an Advance Health Care Directive or Medical Power of Attorney.
-  * **Educational Permission / FERPA:** They can sign a school permission form authorizing the school to speak with you.
 buttons:
-  - "Change child's birthdate": children[0].birthdate
-  - "Exit to Alliance for Children's Rights": exit
-    url: https://allianceforchildrensrights.org/resources/caregivers-affidavit/
-  - "Start over": restart
+  [{"Start over":"restart"}]
 ---
 id: users names
 sets:
@@ -477,8 +486,14 @@ review:
 
       % if user_role_type == 'parent_guardian':
       Parents notified: Yes (automatically marked because you are the parent)
-      % else:
-      Contacted parents: ${ word(yesno(caregiver_advised_parents)) if defined('caregiver_advised_parents') else '' }
+      % elif defined('caregiver_parent_contact_status'):
+        % if caregiver_parent_contact_status == 'advised':
+      Parent notification: Notified parent(s) (Advised box marked)
+        % elif caregiver_parent_contact_status == 'unable':
+      Parent notification: Unable to contact parent(s) (Unable box marked)
+        % elif caregiver_parent_contact_status == 'spoke_one_unable_other':
+      Parent notification: Able to speak with one parent, unable to speak with the other (Both boxes marked)
+        % endif
       % endif
   - Edit: users[0].address.address
     button: |
