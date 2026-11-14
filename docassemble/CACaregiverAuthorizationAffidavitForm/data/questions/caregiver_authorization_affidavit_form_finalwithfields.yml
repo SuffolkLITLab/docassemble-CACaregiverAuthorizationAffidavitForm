@@ -4,57 +4,47 @@ include:
   - docassemble.MassAccess:massaccess.yml
 ---
 metadata:
-  title: >-
-    California Caregiver Authorization Affidavit
-  short title: >-
-    Caregiver Authorization
-  description: |-
-    This affidavit allows adult caregivers to enroll a child in school and approve medical care. Qualified relative caregivers can approve full medical, dental, and mental health care. Non-relative caregivers can approve school enrollment and school-related medical checkups (like vaccines and school physicals).
-  can_I_use_this_form: |
-    You can use this form if you are an adult caring for a child who lives with you in California. It does NOT require a parent's signature, notary, or court filing.
-  before_you_start: |
-    ### Before you get started
-    - You must be at least 18 years old and the child must live with you.
-    - The child must be under 18 years old on the date this form is completed.
-    - Have your identification ready (California Driver's License, California State ID, Consular Card, Medi-Cal ID, or Social Security Number).
-    - If you are a relative (like a grandparent, aunt, uncle, or adult brother or sister), this form allows you to approve full medical and dental care. If you are not a relative, it covers school enrollment and school-related checkups.
-
-    ### When you are finished
-    - Sign and date the form (the signature date is automatically filled as today).
-    - Keep the signed original safe at home.
-    - Give a copy to the school and another copy to doctors or clinics. Do NOT file this in court.
-  when_you_are_finished: |
-    Keep the signed original in a safe place at home. Give copies to the child's school and healthcare providers. Do NOT file this form with the court.
-  efiling_enabled: False
-  integrated_efiling: False
-  integrated_email_filing: False
-  requires_notarization: False
-  unlisted: False
-  landing_page_url: >-
-    https://allianceforchildrensrights.org/resources/caregivers-affidavit/
+  title: California Caregiver Authorization Affidavit
+  short title: Caregiver Authorization
+  description: Prepare a caregiver affidavit for school enrollment and school-related medical care. Relative caregivers
+    can also complete the additional section for other medical and dental care.
+  can_I_use_this_form: The caregiver must be at least 18, and the child must be under 18 and live with the caregiver
+    in California. If you are helping, enter the caregiver's information. The caregiver reviews and signs the affidavit.
+  before_you_start: Have the child's name and birth date and the caregiver's home address ready. For medical or
+    dental care beyond school requirements, the caregiver must be a relative and complete the additional section,
+    including identification. Identification is not needed for the school-related version.
+  when_you_are_finished: Have the caregiver review and sign the affidavit. Keep the original and give copies to
+    the school or health care providers who will rely on it. No court filing or notarization is required.
+  efiling_enabled: false
+  integrated_efiling: false
+  integrated_email_filing: false
+  requires_notarization: false
+  unlisted: false
+  landing_page_url: https://allianceforchildrensrights.org/resources/caregivers-affidavit/
   maturity: production
-  estimated_completion_minutes: "8"
-  estimated_completion_delta: "3"
+  estimated_completion_minutes: '8'
+  estimated_completion_delta: '3'
   LIST_topics:
-    - "CO-00-00-00-00"
+  - CO-00-00-00-00
   tags:
-    - "CO-00-00-00-00"
+  - CO-00-00-00-00
   authors:
-    - Court Forms Online
+  - Court Forms Online
   original_form: []
-  original_form_published_on: ""
+  original_form_published_on: ''
   allowed_courts: []
-  typical_role: "unknown"
-  al_weaver_version: "2.3.1"
-  generated_on: "2026-11-08"
+  typical_role: unknown
+  al_weaver_version: 2.3.1
+  generated_on: '2026-11-08'
   languages:
-    - en
-  jurisdiction: "NAM-US-US+CA"
+  - en
+  jurisdiction: NAM-US-US+CA
   review_date: 2026-11-08
   form_titles:
-    - California Caregiver Authorization Affidavit Form
+  - California Caregiver Authorization Affidavit Form
   form_numbers: []
-  update_notes: "Updated: (1) Added plain-language medical scope distinguishing relatives (full care) from non-relatives (school-related care); (2) Added clear moving instructions distinguishing moving together from child moving out; (3) Clean parent notification questions; (4) Retained required identification options."
+  update_notes: School-related and additional medical paths; explicit item-6 confirmations; caregiver/helper distinction;
+    corrected instructions.
 ---
 code: |
   # This controls the default country and list of states in address field questions
@@ -65,19 +55,18 @@ code: |
   AL_DEFAULT_STATE = "CA"
 ---
 code: |
-  github_repo_name = 'docassemble-CaregiverAuthorizationAffidavitFormFinalwithfields'
+  github_repo_name = 'docassemble-CACaregiverAuthorizationAffidavitForm'
 ---
 template: interview_short_title
 content: |
   Fill out the Caregiver Authorization Form
 ---
 code: |
-  al_form_type = "existing_case"
+  al_form_type = "other_form"
 ---
 id: alweaver assemblyline settings
 initial: True
 code: |
-  # Managed by the graphical AssemblyLine settings editor.
   allowed_courts = []
   AL_ORGANIZATION_TITLE = 'CourtFormsOnline'
   AL_ORGANIZATION_HOMEPAGE = ''
@@ -85,39 +74,21 @@ code: |
   AL_DEFAULT_OVERFLOW_MESSAGE = '...'
   user_ask_role = 'plaintiff'
   al_person_answering = 'user'
-  al_form_requires_digital_signature = False
+  al_form_requires_digital_signature = True
   al_typed_signature_prefix = '/s/'
   al_typed_signature_font = ''
   speak_text = True
   enable_al_language = True
   al_user_default_language = 'en'
   al_interview_languages = ['en']
-  github_user = ''
+  github_user = 'SuffolkLITLab'
   al_next_steps_enabled = True
-  al_next_steps_document_title = 'Caregiver Instructions'
-  al_next_steps_document_purpose = 'authorization'
+  al_next_steps_intro_prompt = 'prepare a California caregiver affidavit'
+  al_next_steps_document_title = "Caregiver's Authorization Affidavit"
+  al_next_steps_document_purpose = 'caregiver authorization'
   al_next_steps_help_organization = "Alliance for Children's Rights"
   al_next_steps_help_url = 'https://allianceforchildrensrights.org/resources/caregivers-affidavit/'
   al_next_steps_generate_qr_code = False
-  # Realistic actionable next steps in plain language
-  al_next_steps_what_happens_next = """1. Print and sign the completed affidavit.
-  2. Keep the signed original in a safe place at home. Give copies to the school and doctors.
-  3. School Enrollment: Give a copy to the child's school for enrollment.
-  4. Medical and Dental Care:
-     - Qualified Relatives: If you are a qualified relative (grandparent, aunt, uncle, adult brother or sister, etc.), you can consent to full medical, dental, and mental health care.
-     - Non-Relative Caregivers: If you are not a relative, you can consent to school-related medical care (like vaccines and school physicals).
-  5. What happens if you move:
-     - Moving together to a new home: You are still the caregiver. Just fill out a new form with your new address and give copies to the school and clinic.
-     - Child moves out of your home: This form is no longer valid. Tell the school and doctors right away.
-  6. Remember that this form is valid for 1 year from the date signed."""
-  al_next_steps_what_can_decision_maker_do = 'Schools and healthcare providers can rely on this form without requiring a court order, parent signature, or notary.'
-  al_next_steps_what_happens_if_i_win = 'Your authorization is active upon signing. If you are a qualified relative, you can enroll the child in school and consent to full medical and dental care. If you are not a relative, you can enroll the child in school and consent to school-related medical care (like vaccines and school physicals).'
----
-# Automatic signature date setting - runs in background so user is never asked
-code: |
-  # Automatically set signature date to today's date
-  users1_signature_date = today()
-  signature_date = today()
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True,target_number=1)
@@ -128,167 +99,114 @@ sections:
   - case_details: Child's info
   - review_caregiver_authorization_affidavit_form_finalwithfields: Review your answers
 ---
-# Code block determining relationship and parental notification
-code: |
-  if user_role_type == 'parent_guardian':
-    # Parents are automatically related to their child
-    users_is_relative_yes = True
-    # If parent, skip asking and automatically mark yes (because it is a yes)
-    users_advised_parents_yes = True
-    users_unable_to_contact_parents_yes = False
-  else:
-    # If caregiver, single yes/no based on if caregiver contacted parents
-    users_advised_parents_yes = caregiver_advised_parents
-    users_unable_to_contact_parents_yes = not caregiver_advised_parents
----
-#################### Interview order #####################
-comment: |
-  Controls order and branching logic for questions specific to this form
 id: interview_order_caregiver_authorization_affidavit_form_finalwithfields
-code: |
-  # 1. Ask caregiver age qualification gate
-  user_age
-  # If caregiver answered 'No' (user_age is False), trigger the caregiver off-ramp screen
-  if not user_age:
-    under_18_offramp
-  nav.set_section('people')
-  # 2. What is your name?
-  users.gather()
-  set_parts(subtitle=str(users))
-  # 3. "When were you born?" screen comes right after asking "What is your name?"
-  users[0].birthdate
-  # 4. Ask whether they are the parent or the caregiver
-  user_role_type
-  # 5. Address question ("What is your address?" for caregiver, "What is the caregiver's address" for parent)
-  users[0].address.address
-  # Formats Question Library address into single-line string for PDF template
-  users1_address_full = users[0].address.on_one_line()
-  # 6. Dedicated standalone ID question screen with dynamic dropdown and tailored length textbox
-  caregiver_id_type
-  users1_id_number
-  # 7. Caregiver relationship check: only asked if caregiver; automatically yes if parent
-  if user_role_type == 'authorized_caregiver':
-    users_is_relative_yes
-  # 8. Parental notification question (Item 6):
-  # If parent, skip the question and automatically mark it yes.
-  # If caregiver, ask if they contacted the parents (single yes/no question).
-  if user_role_type == 'authorized_caregiver':
-    caregiver_advised_parents
-  users_advised_parents_yes
-  nav.set_section('case_details')
-  set_progress(45)
-  children.gather()
-  # Gather child's birthdate
-  children[0].birthdate
-  # 9. Child age check: If child is 18 or older from the date the form is being filled, trigger off-ramp
-  if children[0].age_in_years() >= 18:
-    child_too_old_offramp
-  interview_order_caregiver_authorization_affidavit_form_finalwithfields = True
----
-###################### Main order ######################
-comment: |
-  This block includes the logic for standalone interviews.
-  Delete mandatory: True to include in another interview
 mandatory: True
 code: |
   al_intro_screen
   caregiver_authorization_affidavit_form_finalwithfields_intro
-  interview_order_caregiver_authorization_affidavit_form_finalwithfields
-  # Signature date is set automatically via code block (today())
+  user_role_type
+  user_age
+  if not user_age:
+    under_18_offramp
+  nav.set_section('people')
+  users.gather()
+  set_parts(subtitle=str(users))
+  users[0].address.address
+  nav.set_section('case_details')
+  children.gather()
+  children[0].birthdate
+  if children[0].age_in_years() >= 18:
+    child_too_old_offramp
+  caregiver_medical_requirements
+  caregiver_signing_method
   signature_date
-  # Store anonymous data for analytics / statistics
-  store_variables_snapshot(
-      persistent=True,
-      data={
-          "zip": showifdef("users[0].address.zip"),
-          "reached_interview_end": True,
-      },
-  )
+  store_variables_snapshot(persistent=True, data={"zip": showifdef("users[0].address.zip"), "reached_interview_end": True})
   caregiver_authorization_affidavit_form_finalwithfields_preview_question
-  basic_questions_signature_flow
+  if caregiver_signing_method == 'electronic':
+    caregiver_signing_screen
+    basic_questions_signature_flow
   set_progress(100)
   caregiver_authorization_affidavit_form_finalwithfields_download
 ---
 id: Caregiver Authorization Affidavit
 continue button field: caregiver_authorization_affidavit_form_finalwithfields_intro
-question: "Caregiver Authorization Affidavit"
-subquestion: |2
-  ### Before you start:
-  - You must be at least 18 years old.
-  - The child must live with you and must be under 18 years old.
-  - Get important information: the child's name and the caregiver's identification.
-  - Identification can be California Driver's License, Social Security Number, Medi-Cal ID, or Consular Card.
-  - If you are a relative, this form allows you to approve full medical and dental care. If you are not a relative, it only covers school enrollment and school-related checkups.
-  
-  ### When you finish:
-  - Sign the form.
-  - Keep the original safe at home.
-  - Make copies for the school and doctors.
-  - If you and the child move to a new home together, you are still the caregiver—just fill out a new form with your new address. 
-  If the child moves out of your home, this form is no longer valid.
-  
-  Use this form to enroll a child in school or get them medical care. It is only for use in California. The form does not need a parent’s signature, notary, or court filing.
+question: Caregiver's Authorization Affidavit
+subquestion: |
+  Use this form for a child under 18 who lives with an adult caregiver in California.
+  The caregiver must be at least 18 years old.
+
+  The form can be used for school enrollment and school-related medical care.
+  A relative caregiver can also complete the additional section for other medical and dental care.
+
+  If you are helping someone, enter the caregiver's information. The caregiver must
+  review and sign the affidavit. A parent's signature, notarization, and court filing are not required.
 ---
 id: "18 or Older"
-question: "Are you 18 or older?"
+question: |
+  ${ 'Are you 18 or older?' if user_role_type == 'authorized_caregiver' else 'Is the caregiver 18 or older?' }
 fields:
-  - "Are you 18 or older?": user_age
+  - no label: user_age
     datatype: yesnoradio
 ---
 id: under 18 offramp
 event: under_18_offramp
-question: "You cannot use this form."
-subquestion: |2
-  You must be **at least 18 years old** to fill out this form.
-  
-  Because you answered that you are not 18 or older, you cannot use this form to enroll a child in school or get medical treatment.
-  
-  ### What can you do instead?
-  * **Have an adult complete this form:** Another adult (18 or older) living in the home—such as a relative or guardian—can fill out this form for the child.
-  * **Contact the School District Liaison:** Public school districts have liaisons who can help you with enrolling the child.
+question: The caregiver must be 18 or older
+subquestion: |
+  This affidavit is for an adult caregiver. Another adult who lives with the child may be able to use it.
+
+  For help with school enrollment, contact the school district's liaison or
+  [read about other caregiving options](https://selfhelp.courts.ca.gov/guardianship/other-options).
 buttons:
-  - "Start over": restart
+  - Start over: restart
 ---
-# Screen asking if user is the parent or caregiver (asked right after name)
 id: parent or caregiver role
-question: "Are you the parent or the caregiver?"
+question: Who is filling out this interview?
 fields:
-  - "Select your role:": user_role_type
+  - no label: user_role_type
     datatype: radio
     choices:
-      - "Parent or legal guardian": parent_guardian
-      - "Caregiver": authorized_caregiver
+      - I am the caregiver: authorized_caregiver
+      - I am helping the caregiver: helper
 ---
-# Screen asking if caregiver is a qualified relative
 id: Minor Info1
-question: "Are you related to the child?"
-subquestion: |2
-  Your relationship determines the kind of medical decisions you can make:
-  
-  - **Qualified relatives** can approve full medical and dental care.
-  
-  - **Non-relatives** can approve school enrollment and school-related medical checkups (like vaccines and school physicals).
+question: |
+  ${ 'Are you related to the child?' if user_role_type == 'authorized_caregiver' else 'Is the caregiver related to the child?' }
+subquestion: |
+  The additional medical section is for relative caregivers. Examples include grandparents,
+  aunts, uncles, siblings, first cousins, and stepparents. See the full definition below.
 fields:
-  - label: Are you a relative of the child?
-    field: users_is_relative_yes
+  - Relative under the definition on this form: users_is_relative_yes
     datatype: yesnoradio
-    help: "Qualified relatives include a grandparent, aunt, uncle, brother, sister, stepbrother, stepsister, half-brother, half-sister, niece, nephew, or first cousin."
+    help: |
+      A relative is an adult related to the child by blood, adoption, or affinity (relationship through marriage) within
+      the fifth degree of kinship. This includes stepparents, stepsiblings, relatives
+      whose status is preceded by great, great-great, or grand, and spouses of those
+      relatives, even if the marriage ended through death or divorce.
 ---
-# Screen asking if caregiver notified parents
 id: caregiver advised parents question
-question: "Did you notify the parents?"
-subquestion: "Have you told the parent or legal guardian that you are completing this form to get care for the child?"
+question: Which statements are true for the caregiver?
+subquestion: |
+  These are the statements in item 6 of the affidavit. Select a statement only if the
+  whole statement is true. If you are helping, answer from the caregiver's point of view.
+
+  Both statements can apply, for example, if one parent was notified and did not object,
+  but the other parent cannot be reached. Not having contacted someone yet does not,
+  by itself, mean they cannot be contacted.
 fields:
-  - Did you notify the parents?: caregiver_advised_parents
-    datatype: yesnoradio
+  - I told the child's parents or legal custodians that I intend to authorize medical care, and I have received no objection.: users_advised_parents_yes
+    datatype: yesno
+  - I am unable to contact the child's parents or legal custodians right now to notify them that I intend to authorize medical care.: users_unable_to_contact_parents_yes
+    datatype: yesno
 ---
-# Dedicated Screen for Caregiver ID Number (Required)
+# Identification for the additional medical section
 id: Caregiver ID Number
 question: "Caregiver identification"
 subquestion: |2
-  Please select your identification document. Schools, doctors, and clinics use this number to verify who is signing the form.
+  Item 8 of the additional medical section asks for the caregiver's identification number.
+  If the caregiver does not have a California license, state ID, or consular card, the form allows
+  another form of identification, such as a Medi-Cal or Social Security number.
 fields:
-  - "Select your identification document:": caregiver_id_type
+  - "Select the caregiver's identification document:": caregiver_id_type
     datatype: dropdown
     choices:
       - "California driver's license (CDL)": cdl
@@ -296,6 +214,7 @@ fields:
       - "Consular identification card (Matrícula Consular)": consular
       - "Medi-Cal identification card": medical
       - "Social Security number (SSN)": ssn
+      - "The caregiver does not have an identification number to enter": unavailable
   - "California driver's license number (8 characters):": caregiver_cdl_number
     show if:
       variable: caregiver_id_type
@@ -308,12 +227,11 @@ fields:
       is: ca_id
     hint: "1 letter followed by 7 digits (e.g., I1234567)"
     maxlength: 8
-  - "Consular identification card number (up to 12 characters):": caregiver_consular_number
+  - "Consular identification card number:": caregiver_consular_number
     show if:
       variable: caregiver_id_type
       is: consular
     hint: "Consular card number (e.g., MC12345678)"
-    maxlength: 12
   - "Medi-Cal identification number (9 characters):": caregiver_medical_number
     show if:
       variable: caregiver_id_type
@@ -328,44 +246,20 @@ fields:
     datatype: ssn
     maxlength: 11
 ---
-# Code block to format users1_id_number from the selected ID dropdown
-code: |
-  if caregiver_id_type == 'cdl':
-    users1_id_number = f"California Driver's License (CDL) #{caregiver_cdl_number.strip().upper()}"
-  elif caregiver_id_type == 'ca_id':
-    users1_id_number = f"California State ID Card #{caregiver_ca_id_number.strip().upper()}"
-  elif caregiver_id_type == 'consular':
-    users1_id_number = f"Consular Identification Card (Matrícula Consular) #{caregiver_consular_number.strip().upper()}"
-  elif caregiver_id_type == 'medical':
-    users1_id_number = f"Medi-Cal Identification Card #{caregiver_medical_number.strip().upper()}"
-  elif caregiver_id_type == 'ssn':
-    users1_id_number = f"Social Security Number (SSN): {caregiver_ssn_number.strip()}"
-  else:
-    users1_id_number = ""
+template: childHeadline
+content: |
+  You cannot use this form for a child who is 18 or older.
 ---
 # Off-ramp screen triggered when child is 18 years or older on the date the form is being filled
 id: child too old offramp
 event: child_too_old_offramp
-question: |2
-  ${childHeadline}
-subquestion: |2
+question: "You cannot use this form for a child who is 18 or older."
+subquestion: |2-
   Based on the date of birth you entered (${ children[0].birthdate.format() }), **${ children[0] }** is **${ int(children[0].age_in_years()) } years old** today.
   
   A Caregiver's Authorization Affidavit can **only** be used for a minor child under 18 years of age. Once a person turns 18, they are an adult and can make their own educational and medical decisions.
-  
-  ### Why you cannot use this form:
-  * **Adult Status:** An individual 18 or older has full legal authority to enroll themselves in school, consent to their own medical and dental care, and sign documents.
-  * **Form Not Valid for Adults:** Schools and medical clinics cannot accept a caregiver affidavit for an adult.
-  
-  ### What you can do instead:
-  * **Self-Enrollment & Consent:** The young adult can enroll themselves in school or approve their own medical care.
-  * **Healthcare Power of Attorney:** If they want your help making medical decisions, they can complete an Advance Health Care Directive or Medical Power of Attorney.
-  * **Educational Permission / FERPA:** They can sign a school permission form authorizing the school to speak with you.
 buttons:
-  - "Change child's birthdate": children[0].birthdate
-  - "Exit to Alliance for Children's Rights": exit
-    url: https://allianceforchildrensrights.org/resources/caregivers-affidavit/
-  - "Start over": restart
+  [{"Start over":"restart"}]
 ---
 id: users names
 sets:
@@ -374,49 +268,31 @@ sets:
   - users[i].name.middle
   - users[i].name.suffix
 question: |
-  % if i == 0 and al_person_answering == "user":
-  What is your name?
-  % elif al_form_type in ['starts_case', 'existing_case', 'appeal']:
-  Who is the ${ ordinal(i) } person on your side of the case?
-  % else:
-  What is the name of the ${ ordinal(i) } person who is adding their
-  name to this form with you?
-  % endif
+  ${ 'What is your name?' if user_role_type == 'authorized_caregiver' else "What is the caregiver's name?" }
 fields:
-  - code: |
-      users[i].name_fields()
+  - code: users[i].name_fields()
 ---
-# Dedicated screen for birthdate placed right after asking name
 id: user birthdate
-question: "When were you born?"
-fields:
-  - "Date of birth": users[0].birthdate
-    datatype: date
----
-# Question Library Address Question (connected with Google Maps API autocomplete)
-id: caregiver address
 question: |
-  % if user_role_type == 'authorized_caregiver':
-  What is your address?
-  % else:
-  What is the caregiver's address?
-  % endif
-subquestion: |2
-  % if user_role_type == 'authorized_caregiver':
-  Enter the address where you and the child live together.
-  % else:
-  Enter the address where the caregiver and the child will live together.
-  % endif
+  ${ 'When were you born?' if user_role_type == 'authorized_caregiver' else 'When was the caregiver born?' }
 fields:
-  - code: |
-      users[0].address_fields()
+  - Date of birth: users[0].birthdate
+    datatype: date
+    max: ${ today().plus(years=-18) }
+---
+id: caregiver address
+question: Where do the caregiver and child live?
+subquestion: |
+  Enter the home address where they live together.
+fields:
+  - code: users[0].address_fields()
 sets:
-  - "users[0].address.address"
-  - "users[0].address.city"
-  - "users[0].address.zip"
-  - "users[0].address.unit"
-  - "users[0].address.state"
-  - "users[0].address.country"
+  - users[0].address.address
+  - users[0].address.city
+  - users[0].address.zip
+  - users[0].address.unit
+  - users[0].address.state
+  - users[0].address.country
 ---
 id: children names
 sets:
@@ -435,19 +311,19 @@ fields:
       children[i].name_fields()
 ---
 id: preview caregiver_authorization_affidavit_form_finalwithfields
-question: |
-  Preview your form before you sign it
-subquestion: |2
-  Here is a preview of the official California Caregiver's Authorization Affidavit you will sign on the next page. The signature date is automatically recorded as today (${ users1_signature_date.format() }).
-  
-  
+question: Preview the affidavit
+subquestion: |
+  Check the names, address, and selected statements before signing.
+  The signing date on the form is ${ signature_date.format('MM/dd/yyyy') }.
+
+  % if caregiver_purpose == 'school':
+  This version completes items 1–4 for school enrollment and school-related medical care.
+  Items 5–8 are blank. It does not complete the additional section for other medical or dental care.
+  % endif
+
   ${ caregiver_authorization_affidavit_form_finalwithfields_attachment.as_pdf(key='preview') }
-  
-  Open the form preview in a new tab. Use the "Edit answers" button to edit your answers.
-  
+
   ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
-  
-  Return to this interview tab to continue and sign your form.
 continue button field: caregiver_authorization_affidavit_form_finalwithfields_preview_question
 ---
 code: |
@@ -458,94 +334,122 @@ code: |
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
 id: caregiver authorization affidavit form finalwithfields review screen
-event: review_caregiver_authorization_affidavit_form_finalwithfields
-question: |
-  Review your answers
+event:
+  - review_caregiver_authorization_affidavit_form_finalwithfields
+  - review_all_sections
+need:
+  - caregiver_medical_requirements
+# Opening review starts a fresh preview/signature cycle, including nested table edits.
+undefine:
+  - caregiver_authorization_affidavit_form_finalwithfields_preview_question
+  - caregiver_signing_screen
+  - basic_questions_signature_flow
+  - users[0].signature
+  - users[0].typed_signature
+  - saw_signature_choice
+  - signature_choice
+  - saw_signature_qrcode
+  - signature_wait_screen
+  - signature_phone_followup
+question: Review your answers
 review:
-  - Edit: users.revisit
-    button: |
-      **Users**
-
-      % for item in users:
-        * ${ item }
-      % endfor
   - Edit: user_role_type
     button: |
-      **Role & Parental Notification (Item 6)**
+      **Person completing the interview**
 
-      Role: ${ 'Parent or legal guardian' if user_role_type == 'parent_guardian' else 'Caregiver' }
+      ${ 'The caregiver' if user_role_type == 'authorized_caregiver' else 'Someone helping the caregiver' }
+  - Edit: users.revisit
+    button: |
+      **Caregiver**
 
-      % if user_role_type == 'parent_guardian':
-      Parents notified: Yes (automatically marked because you are the parent)
-      % else:
-      Contacted parents: ${ word(yesno(caregiver_advised_parents)) if defined('caregiver_advised_parents') else '' }
-      % endif
+      ${ users[0] }
   - Edit: users[0].address.address
     button: |
-      **${ "Your Home Address" if user_role_type == "authorized_caregiver" else "Caregiver's Home Address" }**
+      **Home address**
 
-      Full address: ${ users[0].address.on_one_line() if defined('users[0].address.address') else showifdef('users1_address_full') }
-  - Edit: caregiver_id_type
-    button: |
-      **Caregiver Identification (Item 8)**
-
-      Caregiver's ID: ${ showifdef('users1_id_number') }
-  - Edit: users_is_relative_yes
-    button: |
-      **Relationship to Child (Item 5)**
-
-      % if user_role_type == 'parent_guardian':
-      Related to child: Yes (automatically qualified as parent)
-      % else:
-      Caregiver is a qualified relative: ${ word(yesno(users_is_relative_yes)) if defined('users_is_relative_yes') else '' }
-      % endif
+      ${ users[0].address.on_one_line() }
   - Edit: children.revisit
     button: |
-      **Children**
+      **Child**
 
-      % for item in children:
-        * ${ item }
-      % endfor
+      ${ children[0] }, born ${ children[0].birthdate.format('MM/dd/yyyy') }
+  - Edit: caregiver_purpose
+    button: |
+      **Use of the form**
+
+      ${ 'School enrollment and school-related medical care' if caregiver_purpose == 'school' else 'Medical or dental care beyond school requirements' }
+  - Edit: users_is_relative_yes
+    show if: caregiver_purpose == 'medical'
+    button: |
+      **Relative caregiver**
+
+      ${ word(yesno(users_is_relative_yes)) }
+  - Edit: users_advised_parents_yes
+    show if: caregiver_purpose == 'medical'
+    button: |
+      **Item 6 confirmations**
+
+      Notified the parents or legal custodians and received no objection: ${ word(yesno(users_advised_parents_yes)) }
+
+      Unable to contact the parents or legal custodians: ${ word(yesno(users_unable_to_contact_parents_yes)) }
+  - Edit: users[0].birthdate
+    show if: caregiver_purpose == 'medical'
+    button: |
+      **Caregiver's birth date**
+
+      ${ users[0].birthdate.format('MM/dd/yyyy') }
+  - Edit: caregiver_id_type
+    show if: caregiver_purpose == 'medical'
+    button: |
+      **Identification**
+
+      ${ users1_id_number }
+  - Edit: caregiver_signing_method
+    button: |
+      **Signature**
+
+      ${ 'Print and sign on paper' if caregiver_signing_method == 'paper' else 'Sign electronically' }
+  - Edit: signature_date
+    button: |
+      **Signing date**
+
+      ${ signature_date.format('MM/dd/yyyy') }
 ---
 id: edit users
 continue button field: users.revisit
 question: |
-  Edit users
+  Edit caregiver
 subquestion: |
   ${ users.table }
 
+  % if users.number_gathered() < 1:
   ${ users.add_action() }
+  % endif
 ---
 table: users.table
 rows: users
 columns:
-  - Name: |
-      row_item.name_full() if defined("row_item.name.first") else ""
-  - Birthdate: |
-      row_item.birthdate if defined("row_item.birthdate") else ""
-  - Signature: |
-      row_item.signature if defined("row_item.signature") else ""
+  - Name: row_item.name_full()
 edit:
   - name.first
-  - birthdate
 confirm: True
 ---
 id: edit children
 continue button field: children.revisit
 question: |
-  Edit children
+  Edit child
 subquestion: |
   ${ children.table }
 
+  % if children.number_gathered() < 1:
   ${ children.add_action() }
+  % endif
 ---
 table: children.table
 rows: children
 columns:
-  - Name: |
-      row_item.name_full() if defined("row_item.name.first") else ""
-  - Birthdate: |
-      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Name: row_item.name_full()
+  - Birth date: row_item.birthdate.format('MM/dd/yyyy')
 edit:
   - name.first
   - birthdate
@@ -553,26 +457,29 @@ confirm: True
 ---
 id: download caregiver_authorization_affidavit_form_finalwithfields
 event: caregiver_authorization_affidavit_form_finalwithfields_download
-question: |2
-  Your Caregiver Affidavit is Ready!
-subquestion: |2
-  Thank you, ${users[0]}. Your California Caregiver Authorization Affidavit has been generated.
-  
-  
-  ### Download Options:
-  
-  
+question: Your caregiver affidavit is ready
+subquestion: |
+  % if caregiver_signing_method == 'paper':
+  Print the affidavit and have ${ users[0] } review and sign it. Use the actual signing date.
+  % else:
+  Have ${ users[0] } review the signed affidavit before giving copies to the school or health care providers.
+  % endif
+
+  % if caregiver_purpose == 'school':
+  This version is for school enrollment and school-related medical care. The additional medical section is blank.
+  % endif
+
   ${ action_button_html(url_action('review_caregiver_authorization_affidavit_form_finalwithfields'), label=word('Edit answers'), color='info') }
-  
-  #### 1. Official Caregiver Authorization Affidavit (Signed Legal Form Only)
+
+  ### Affidavit
   ${ al_affidavit_bundle.download_list_html() }
-  
-  #### 2. Caregiver Next Steps & Practical Instructions (Separate Document)
+
+  ### Instructions
   ${ al_next_steps_bundle.download_list_html() }
-  
-  #### 3. Complete Packet (Both Documents)
+
+  ### Complete packet
   ${ al_user_bundle.download_list_html() }
-  
+
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 progress: 100
 ---
@@ -586,19 +493,24 @@ objects:
   - al_affidavit_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_authorization_affidavit_official_form", enabled=True)
   - al_next_steps_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions], filename="caregiver_next_steps_instructions_guide", enabled=True)
   - al_user_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment, caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions], filename="caregiver_authorization_affidavit_packet", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_affidavit", enabled=True)
   - al_provider_bundle: ALDocumentBundle.using(elements=[caregiver_authorization_affidavit_form_finalwithfields_attachment], filename="caregiver_affidavit_for_school_and_health_providers", enabled=True)
 ---
 template: caregiver_authorization_affidavit_form_finalwithfields_attachment.title
 content: |
-  California Caregiver Authorization Affidavit Form (Official Legal Document)
+  Caregiver's Authorization Affidavit
 ---
 template: caregiver_authorization_affidavit_form_finalwithfields_Post_interview_instructions.title
 content: |
-  Caregiver Next Steps & Instructions Checklist (Standalone Guide)
+  Using your caregiver affidavit
 ---
 template: al_affidavit_bundle.title
 content: |
-  Official Signed Caregiver Affidavit (Legal Form Only)
+  Caregiver's Authorization Affidavit
+---
+template: al_court_bundle.title
+content: |
+  Caregiver's Authorization Affidavit
 ---
 template: al_next_steps_bundle.title
 content: |
@@ -628,13 +540,178 @@ attachment:
   pdf template file: Caregiver_Authorization_Affidavit_Form_final-with-fields.pdf
   fields:
       - "children1_name_full": ${ children[0] }
-      - "children1_birthdate": ${ children[0].birthdate.format() }
+      - "children1_birthdate": ${ children[0].birthdate.format("MM/dd/yyyy") }
       - "users1_name_full": ${ users[0] }
-      - "users1_address_full": ${ users[0].address.on_one_line() if defined("users[0].address.address") else users1_address_full }
-      - "users_is_relative_yes": ${ users_is_relative_yes }
-      - "users_advised_parents_yes": ${ users_advised_parents_yes }
-      - "users_unable_to_contact_parents_yes": ${ users_unable_to_contact_parents_yes }
-      - "users1_birthdate": ${ users[0].birthdate.format() }
-      - "users1_id_number": ${ users1_id_number }
-      - "users1_signature": ${ users[0].signature_if_final(i) }
-      - "users1_signature_date": ${ users1_signature_date.format() }
+      - "users1_address_full": ${ users[0].address.on_one_line() }
+      - "users_is_relative_yes": ${ caregiver_purpose == 'medical' and users_is_relative_yes }
+      - "users_advised_parents_yes": ${ caregiver_purpose == 'medical' and users_advised_parents_yes }
+      - "users_unable_to_contact_parents_yes": ${ caregiver_purpose == 'medical' and users_unable_to_contact_parents_yes }
+      - "users1_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') if caregiver_purpose == 'medical' else '' }
+      - "users1_id_number": ${ users1_id_number if caregiver_purpose == 'medical' else '' }
+      - "users1_signature": ${ users[0].signature_if_final(i) if caregiver_signing_method == 'electronic' else '' }
+      - "users1_signature_date": ${ signature_date.format('MM/dd/yyyy') }
+---
+id: caregiver purpose
+question: How will the caregiver use this form?
+subquestion: |
+  School-related medical care includes vaccinations and exams required for school
+  enrollment or participation in school activities.
+fields:
+  - no label: caregiver_purpose
+    datatype: radio
+    choices:
+      - School enrollment and school-related medical care: school
+      - Medical or dental care beyond school requirements: medical
+---
+id: nonrelative medical section
+question: The additional medical section is for relatives
+subquestion: |
+  A caregiver who is not a relative can use this affidavit for school enrollment
+  and school-related medical care. The additional section for other medical and
+  dental care is for relative caregivers.
+fields:
+  - What would you like to do?: nonrelative_choice
+    datatype: radio
+    choices:
+      - Prepare the school-related version: school
+      - Review the relationship answer: review
+      - Read about other caregiving options: options
+---
+id: medical contact incomplete
+question: Item 6 has not been completed
+subquestion: |
+  Neither statement in item 6 was selected. The additional medical section is not
+  complete with these answers. Do not select a statement unless it is true.
+
+  If someone with legal custody has objected, this affidavit does not resolve that
+  disagreement. Read about other options or get legal help before relying on it
+  for that medical decision.
+fields:
+  - What would you like to do?: contact_incomplete_choice
+    datatype: radio
+    choices:
+      - Prepare the school-related version: school
+      - Review the item 6 answers: review
+      - Read about other caregiving options: options
+---
+id: medical identification unavailable
+question: Item 8 has not been completed
+subquestion: |
+  An identification number is needed to complete the additional medical section.
+  You can still prepare the school-related version without entering one.
+fields:
+  - What would you like to do?: id_unavailable_choice
+    datatype: radio
+    choices:
+      - Prepare the school-related version: school
+      - Review the identification choices: review
+      - Read about other caregiving options: options
+---
+id: other caregiving options
+event: caregiver_medical_options
+question: Other caregiving options
+subquestion: |
+  [California Courts explains other options for caring for a child](https://selfhelp.courts.ca.gov/guardianship/other-options).
+  The [Alliance for Children's Rights](https://allianceforchildrensrights.org/resources/caregivers-affidavit/)
+  also has information about caregiver affidavits.
+
+  A caregiver affidavit does not change the parents' or legal guardians' rights.
+  Get legal help if there is a disagreement about the child's care.
+buttons:
+  - Start over: restart
+  - Exit: exit
+---
+id: caregiver signing method
+question: How will the caregiver sign the affidavit?
+fields:
+  - no label: caregiver_signing_method
+    datatype: radio
+    choices:
+      - Print and sign on paper: paper
+      - Sign electronically: electronic
+---
+id: caregiver signing date
+question: What signing date should appear on the affidavit?
+subquestion: |
+  Use the actual signing date. If it changes, update the date before signing.
+fields:
+  - Signing date: signature_date
+    datatype: date
+    default: ${ today() }
+---
+id: caregiver signing screen
+continue button field: caregiver_signing_screen
+question: The caregiver must review and sign
+subquestion: |
+  ${ users[0] } must review the affidavit and complete the signature on the next screens.
+  If you are helping, let the caregiver review the form and sign it.
+
+---
+# Recheck eligibility before both the main flow and the review event.
+only sets: caregiver_medical_requirements
+code: |
+  caregiver_purpose
+  if caregiver_purpose == 'medical':
+    users_is_relative_yes
+    if not users_is_relative_yes:
+      nonrelative_choice
+      if nonrelative_choice == 'school':
+        caregiver_purpose = 'school'
+        undefine('nonrelative_choice')
+      elif nonrelative_choice == 'review':
+        undefine('nonrelative_choice')
+        force_ask('users_is_relative_yes')
+      else:
+        caregiver_medical_options
+  if caregiver_purpose == 'medical':
+    users_advised_parents_yes
+    users_unable_to_contact_parents_yes
+    if not (users_advised_parents_yes or users_unable_to_contact_parents_yes):
+      contact_incomplete_choice
+      if contact_incomplete_choice == 'school':
+        caregiver_purpose = 'school'
+        undefine('contact_incomplete_choice')
+      elif contact_incomplete_choice == 'review':
+        undefine('contact_incomplete_choice')
+        force_ask('users_advised_parents_yes')
+      else:
+        caregiver_medical_options
+  if caregiver_purpose == 'medical':
+    users[0].birthdate
+    caregiver_id_type
+    if caregiver_id_type == 'unavailable':
+      id_unavailable_choice
+      if id_unavailable_choice == 'school':
+        caregiver_purpose = 'school'
+        undefine('id_unavailable_choice')
+      elif id_unavailable_choice == 'review':
+        undefine('id_unavailable_choice')
+        force_ask('caregiver_id_type')
+      else:
+        caregiver_medical_options
+  if caregiver_purpose == 'medical':
+    users1_id_number
+  caregiver_medical_requirements = True
+
+---
+reset:
+  - caregiver_medical_requirements
+---
+# Recompute from current answers, including when editing within the review event.
+reconsider: True
+code: |
+  if caregiver_purpose == 'medical':
+    if caregiver_id_type == 'cdl':
+      users1_id_number = "California Driver's License (CDL) #" + caregiver_cdl_number.strip().upper()
+    elif caregiver_id_type == 'ca_id':
+      users1_id_number = 'California State ID Card #' + caregiver_ca_id_number.strip().upper()
+    elif caregiver_id_type == 'consular':
+      users1_id_number = 'Consular Identification Card #' + caregiver_consular_number.strip().upper()
+    elif caregiver_id_type == 'medical':
+      users1_id_number = 'Medi-Cal Identification Card #' + caregiver_medical_number.strip().upper()
+    elif caregiver_id_type == 'ssn':
+      users1_id_number = 'Social Security Number: ' + caregiver_ssn_number.strip()
+    else:
+      users1_id_number = ''
+  else:
+    users1_id_number = ''
