@@ -4,6 +4,7 @@ include:
   - docassemble.MassAccess:massaccess.yml
 ---
 metadata:
+  asklit_id: "6864853c6fca493dbc7bcc2d2801da6e"
   title: California Caregiver Authorization Affidavit
   short title: Caregiver Authorization
   description: Prepare a caregiver affidavit for school enrollment and school-related medical care. Relative caregivers
