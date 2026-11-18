@@ -1,3 +1,10 @@
+---
+translations:
+  - FamilySpanish12_es.xlsx
+---
+include:
+  - family_spanish_words.yml
+---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
@@ -37,8 +44,7 @@ metadata:
   typical_role: unknown
   al_weaver_version: 2.3.1
   generated_on: '2026-11-08'
-  languages:
-  - en
+  languages: [en, es]
   jurisdiction: NAM-US-US+CA
   review_date: 2026-11-08
   form_titles:
@@ -81,12 +87,9 @@ code: |
   speak_text = True
   enable_al_language = True
   al_user_default_language = 'en'
-  al_interview_languages = ['en']
+  al_interview_languages = ["en", "es"]
   github_user = 'SuffolkLITLab'
   al_next_steps_enabled = True
-  al_next_steps_intro_prompt = 'prepare a California caregiver affidavit'
-  al_next_steps_document_title = "Caregiver's Authorization Affidavit"
-  al_next_steps_document_purpose = 'caregiver authorization'
   al_next_steps_help_organization = "Alliance for Children's Rights"
   al_next_steps_help_url = 'https://allianceforchildrensrights.org/resources/caregivers-affidavit/'
   al_next_steps_generate_qr_code = False
@@ -279,7 +282,7 @@ question: |
 fields:
   - Date of birth: users[0].birthdate
     datatype: date
-    max: ${ today().plus(years=-18) }
+    max: "${ (today().plus(years=-18)).format('yyyy-MM-dd', language='en') }"
 ---
 id: caregiver address
 question: Where do the caregiver and child live?
@@ -434,6 +437,8 @@ columns:
 edit:
   - name.first
 confirm: True
+edit header: |
+  ${ word("Actions") }
 ---
 id: edit children
 continue button field: children.revisit
@@ -455,6 +460,8 @@ edit:
   - name.first
   - birthdate
 confirm: True
+edit header: |
+  ${ word("Actions") }
 ---
 id: download caregiver_authorization_affidavit_form_finalwithfields
 event: caregiver_authorization_affidavit_form_finalwithfields_download
@@ -541,16 +548,16 @@ attachment:
   pdf template file: Caregiver_Authorization_Affidavit_Form_final-with-fields.pdf
   fields:
       - "children1_name_full": ${ children[0] }
-      - "children1_birthdate": ${ children[0].birthdate.format("MM/dd/yyyy") }
+      - "children1_birthdate": ${ children[0].birthdate.format("MM/dd/yyyy", language='en') }
       - "users1_name_full": ${ users[0] }
       - "users1_address_full": ${ users[0].address.on_one_line() }
       - "users_is_relative_yes": ${ caregiver_purpose == 'medical' and users_is_relative_yes }
       - "users_advised_parents_yes": ${ caregiver_purpose == 'medical' and users_advised_parents_yes }
       - "users_unable_to_contact_parents_yes": ${ caregiver_purpose == 'medical' and users_unable_to_contact_parents_yes }
-      - "users1_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy') if caregiver_purpose == 'medical' else '' }
+      - "users1_birthdate": ${ users[0].birthdate.format('MM/dd/yyyy', language='en') if caregiver_purpose == 'medical' else '' }
       - "users1_id_number": ${ users1_id_number if caregiver_purpose == 'medical' else '' }
       - "users1_signature": ${ users[0].signature_if_final(i) if caregiver_signing_method == 'electronic' else '' }
-      - "users1_signature_date": ${ signature_date.format('MM/dd/yyyy') }
+      - "users1_signature_date": ${ signature_date.format('MM/dd/yyyy', language='en') }
 ---
 id: caregiver purpose
 question: How will the caregiver use this form?
@@ -716,3 +723,10 @@ code: |
       users1_id_number = ''
   else:
     users1_id_number = ''
+
+---
+language: es
+sections:
+- people: Datos de la persona cuidadora
+- case_details: Información del menor
+- review_caregiver_authorization_affidavit_form_finalwithfields: Revise sus respuestas
